@@ -3,8 +3,8 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-from .forms import UserAddForm, UserEditForm, LoginForm
-from .models import connect_db, db, User
+from forms import UserAddForm, UserEditForm, LoginForm
+from models import connect_db, db, User
 
 app = Flask(__name__)
 
@@ -14,10 +14,14 @@ app.config['SECRET_KEY'] = "KariLovesRobSooooooooMuch"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 uri = os.environ.get('DATABASE_URL', 'postgresql:///book')
+if uri.startswith('postgres://'):
+	uri = uri.replace('postgres://', 'postgresql://', 1)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
+
 connect_db(app)
+db.create_all()
 
     #######################################################
     #Login / register / logout
@@ -44,6 +48,10 @@ def do_logout():
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+
+@app.route('/')
+def homepage():
+    return render_template ("home.html")
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -145,3 +153,12 @@ def delete_user():
 
     return redirect("/signup")
    
+    #######################################################
+    # error handling
+    #######################################################
+
+@app.errorhandler(500)
+def page_not_found(e):
+    """when the search fails it returns 500, so redirect for that"""
+
+    return render_template('badsearch.html'), 500
