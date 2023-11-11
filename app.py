@@ -1,5 +1,13 @@
 import os
-
+# from google.auth.transport.requests import Request
+# from google.oauth2.credentials import Credentials
+# from google_auth_oauthlib.flow import InstalledAppFlow
+# from googleapiclient.discovery import build
+# from googleapiclient.errors import HttpError
+import json
+import requests
+from urllib.request import urlopen
+from googleapiclient.discovery import build
 from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -23,9 +31,31 @@ app.config['SQLALCHEMY_DATABASE_URI'] = uri
 connect_db(app)
 db.create_all()
 
-    #######################################################
+api_key = "AIzaSyCUg3r9gfvDYIa_y33XCA5wobD3S4do8g8"
+
+url = "https://www.googleapis.com/books/v1/volumes"
+
+payload = {
+    'q': 'title',
+    'key': api_key
+}
+
+#######################################################
+    #GOOGLE BOOKS ROUTES
+#######################################################
+
+@app.route("/search")
+def search():
+    book = request.args.get('q')
+    payload["q"] = book
+    res = requests.get(url, params = payload)
+    data = res.json()
+    print(data)
+    return redirect('/')
+
+#######################################################
     #Login / register / logout
-    #######################################################
+#######################################################
 
 @app.before_request
 def add_user_to_g():
