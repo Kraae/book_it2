@@ -91,10 +91,13 @@ def add_fav_book(id):
     if not g.user:
         flash("Have to be logged in to add a favorite", "danger")
         return redirect("/login")
-    
+    res = requests.get(url +'/'+id)
+    book = res.json()
+    book_title = book['volumeInfo']['title']
     Bookshelf.add(
         user_id = g.user.id,
-        book_id = id
+        book_id = id,
+        book_title = book_title
     )
     db.session.commit()
     user_id = g.user.id
@@ -192,7 +195,10 @@ def signup():
 def users_show(user_id):
     """Show user profile."""
     user = User.query.get_or_404(user_id)
-    return render_template('users/detail.html', user=user)
+    bookshelf = Bookshelf.byUser(user_id)
+    # print(dir(bookshelf))
+    print(bookshelf.values)
+    return render_template('users/detail.html', user=user, bookshelf=bookshelf)
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():

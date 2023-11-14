@@ -21,24 +21,34 @@ class Bookshelf(db.Model):
         primary_key=True
     )   
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="cascade"))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="cascade"), nullable = False)
     
     book_id = db.Column(
         db.String,
-        unique=True
+        unique=True,
+        nullable = False
+    )
+    book_title = db.Column(
+        db.String,
+        nullable = False
+
     )
 
     @classmethod
-    def add(cls, user_id, book_id):
+    def add(cls, user_id, book_id,book_title):
         """ADDS A FAVORITE BOOK TO THE LIST"""
 
         favorite = Bookshelf(
             user_id = user_id,
-            book_id = book_id
+            book_id = book_id,
+            book_title = book_title
         )
         
         db.session.add(favorite)
         return favorite
+    @classmethod
+    def byUser(cls, user_id):
+        return Bookshelf.query.filter_by(user_id = user_id)
 
 class User(db.Model):
 

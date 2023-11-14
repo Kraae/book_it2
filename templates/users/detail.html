@@ -16,8 +16,16 @@
                     <a href="/users/delete" class="btn btn-outline-danger">Delete Profile</a>
                     {%endif%}
                 </div>
+                <div>
+                    <ul>
+                        {%for book in bookshelf%}
+                        <li>
+                            {{book}}
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
