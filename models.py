@@ -46,9 +46,9 @@ class Bookshelf(db.Model):
         
         db.session.add(favorite)
         return favorite
-    @classmethod
-    def byUser(cls, user_id):
-        return Bookshelf.query.filter_by(user_id = user_id)
+    # @classmethod
+    # def byUser(cls, user_id):
+        # return Bookshelf.query.filter_by(user_id = user_id)
 
 class User(db.Model):
 

@@ -17,10 +17,14 @@
                     {%endif%}
                 </div>
                 <div>
+                    <h2>FAVORITES</h2>
                     <ul>
                         {%for book in bookshelf%}
                         <li>
-                            {{book}}
+                            <a href="/book/{{book['book_id']}}">{{book['book_title']}}</a>
+                            <br>
+                            <a href="/book/{{book['book_id']}}/favorite/delete"
+                                class="btn btn-outline-danger">Delete</a>
                         </li>
                         {%endfor%}
                     </ul>

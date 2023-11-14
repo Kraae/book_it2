@@ -1,6 +1,5 @@
 {%extends 'base.html'%}
 {%block content%}
-<a href="{{book['id']}}/favorite">CLICK TO FAVORITE</a>
 <ul>
 
     <h2>
@@ -27,6 +26,7 @@
     {%endfor%}
 </ul>
 {{book['volumeInfo']['description']|safe}}
-
+<br>
+<a href="{{book['id']}}/favorite" class="btn btn-outline-secondary">ADD TO FAVORITES</a>
 
 {%endblock%}

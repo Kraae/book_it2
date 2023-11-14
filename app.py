@@ -44,20 +44,6 @@ def search():
     book = request.args.get('q')
     payload["q"] = book
     pg = 1
-    # payload['maxResults'] = '40'
-    # res = requests.get(url, params = payload)
-    # data = res.json()
-    # print(len(data['items']))
-    # print(dir(data))
-    # print(data['items'][0]['volumeInfo']['title'])
-    # print(data['items'][0]['id'])
-    # print('************************************************')
-    # print(data['items'][1]['volumeInfo']['title'])
-    # print(data['items'][1]['id'])
-    # print('************************************************')
-    # print(data['items'][2]['volumeInfo']['title'])
-    # print(data['items'][2]['id'])
-    # print('************************************************')
     return redirect(f'/books/{pg}')
 
 @app.route('/books/<int:pg>')
@@ -103,6 +89,17 @@ def add_fav_book(id):
     user_id = g.user.id
     return redirect (f"/users/{user_id}")
     
+@app.route('/book/<book_id>/favorite/delete', methods= ["GET","POST"])
+def delete_favorite(book_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    book = Bookshelf.query.filter(Bookshelf.book_id==book_id).first()
+    db.session.delete(book)
+    db.session.commit()
+
+    return redirect(f"/users/{g.user.id}")
+
 
 
 #######################################################
@@ -191,13 +188,11 @@ def signup():
 
     #######################################################
 
-@app.route('/users/<int:user_id>')
+@app.route('/users/<int:user_id>', methods=["GET", "POST"])
 def users_show(user_id):
     """Show user profile."""
     user = User.query.get_or_404(user_id)
-    bookshelf = Bookshelf.byUser(user_id)
-    # print(dir(bookshelf))
-    print(bookshelf.values)
+    bookshelf = Bookshelf.query.filter(Bookshelf.user_id==user_id).all()
     return render_template('users/detail.html', user=user, bookshelf=bookshelf)
 
 @app.route('/users/profile', methods=["GET", "POST"])
