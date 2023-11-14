@@ -1,9 +1,4 @@
 import os
-# from google.auth.transport.requests import Request
-# from google.oauth2.credentials import Credentials
-# from google_auth_oauthlib.flow import InstalledAppFlow
-# from googleapiclient.discovery import build
-# from googleapiclient.errors import HttpError
 import json
 import requests
 from urllib.request import urlopen
@@ -12,7 +7,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g, 
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from forms import UserAddForm, UserEditForm, LoginForm
-from models import connect_db, db, User
+from models import connect_db, db, User, Bookshelf
 
 app = Flask(__name__)
 
@@ -48,10 +43,64 @@ payload = {
 def search():
     book = request.args.get('q')
     payload["q"] = book
+    pg = 1
+    # payload['maxResults'] = '40'
+    # res = requests.get(url, params = payload)
+    # data = res.json()
+    # print(len(data['items']))
+    # print(dir(data))
+    # print(data['items'][0]['volumeInfo']['title'])
+    # print(data['items'][0]['id'])
+    # print('************************************************')
+    # print(data['items'][1]['volumeInfo']['title'])
+    # print(data['items'][1]['id'])
+    # print('************************************************')
+    # print(data['items'][2]['volumeInfo']['title'])
+    # print(data['items'][2]['id'])
+    # print('************************************************')
+    return redirect(f'/books/{pg}')
+
+@app.route('/books/<int:pg>')
+def books(pg):
+    booklist = []
+    payload['startIndex'] = str((pg-1)*40)
+    payload['maxResults'] = '40'
     res = requests.get(url, params = payload)
     data = res.json()
+    x = 0
+    y = 40
+    for b in range (x, y):
+        booklist.append(data['items'][b])
+    return render_template ('books.html', books = booklist, pg = pg)
+
+
+
+
+
+
+@app.route('/book/<id>')
+def search_book(id):
+
+    res = requests.get(url +'/'+id)
+    data = res.json()
     print(data)
-    return redirect('/')
+    return render_template('book.html', book = data)
+
+@app.route('/book/<id>/favorite', methods= ["GET","POST"])
+def add_fav_book(id):
+    if not g.user:
+        flash("Have to be logged in to add a favorite", "danger")
+        return redirect("/login")
+    
+    Bookshelf.add(
+        user_id = g.user.id,
+        book_id = id
+    )
+    db.session.commit()
+    user_id = g.user.id
+    return redirect (f"/users/{user_id}")
+    
+
 
 #######################################################
     #Login / register / logout
@@ -168,7 +217,7 @@ def edit_profile():
 
     return render_template('users/edit.html', form=form, user_id=user.id)
 
-@app.route('/users/delete', methods=["POST"])
+@app.route('/users/delete')
 def delete_user():
     """Delete user."""
 

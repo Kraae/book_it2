@@ -13,6 +13,33 @@ def connect_db(app):
     with app.app_context():
         db.create_all()
 
+class Bookshelf(db.Model):
+    __tablename__='favorites'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )   
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="cascade"))
+    
+    book_id = db.Column(
+        db.String,
+        unique=True
+    )
+
+    @classmethod
+    def add(cls, user_id, book_id):
+        """ADDS A FAVORITE BOOK TO THE LIST"""
+
+        favorite = Bookshelf(
+            user_id = user_id,
+            book_id = book_id
+        )
+        
+        db.session.add(favorite)
+        return favorite
+
 class User(db.Model):
 
     __tablename__ = 'users'
@@ -24,6 +51,8 @@ class User(db.Model):
     email = db.Column(db.Text, nullable = False, unique = True)
 
     password = db.Column(db.Text, nullable=False)
+
+    favorites = db.relationship('Bookshelf')
 
     @classmethod
     def signup(cls, username, email, password):
