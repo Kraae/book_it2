@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="mt-5 pt-5">
+    <div class="mt-5 pt-5">
+
+        <img src="{{ g.user.image_url }}" onerror="this.onerror=null; this.src='/static/images/trainers.png'"
+            alt="{{ g.user.username }}" id="profile-avatar">
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="ml-auto">
+                    {% if g.user.id == user.id %}
+                    <h3>{{g.user.username}}</h3>
+                    <a href="/users/profile" class="btn btn-outline-secondary">Edit Profile</a>
+                    <a href="/users/delete" class="btn btn-outline-danger">Delete Profile</a>
+                    {%endif%}
+                </div>
+                <div>
+                    <h2>FAVORITES</h2>
+                    <ul>
+                        {%for book in bookshelf%}
+                        <li>
+                            <a href="/book/{{book['book_id']}}">{{book['book_title']}}</a>
+                            <br>
+                            <a href="/book/{{book['book_id']}}/favorite/delete"
+                                class="btn btn-outline-danger">Delete</a>
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

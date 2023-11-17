@@ -1,0 +1,32 @@
+{%extends 'base.html'%}
+{%block content%}
+<ul>
+
+    <h2>
+        <img src="{{book['volumeInfo']['imageLinks']['smallThumbnail']}}" alt="images/trainers.png">
+        <br>
+        TITLE:
+    </h2>
+    <li>
+        {{book['volumeInfo']['title']}}
+    </li>
+    <h2>
+        AUTHOR:
+    </h2>
+    {%for a in book['volumeInfo']['authors']%}
+    <li>
+        {{a}}
+    </li>
+    {%endfor%}
+    <h2>Categories</h2>
+    {%for c in book['volumeInfo']['categories']%}
+    <li>
+        {{c}}
+    </li>
+    {%endfor%}
+</ul>
+{{book['volumeInfo']['description']|safe}}
+<br>
+<a href="{{book['id']}}/favorite" class="btn btn-outline-secondary">ADD TO FAVORITES</a>
+
+{%endblock%}

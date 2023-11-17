@@ -1,0 +1,19 @@
+{%extends 'base.html'%}
+{%block content%}
+<div>
+    {%if pg > 1%}
+    <a href="/books/{{(pg-1)}}" class="btn btn-dark"> previous page: {{(pg-1)}}</a>
+    <a href="/books/{{(pg+1)}}" class="btn btn-dark"> next page: {{(pg+1)}}</a>
+    {%else%}
+    <a href="/books/2" class="btn btn-dark"> next page: 2</a>
+    {%endif%}
+
+    <ul>
+        {%for book in books %}
+        <li>
+            <a href="/book/{{book['id']}}"> {{book['volumeInfo']['title']}}</a>
+        </li>
+        {%endfor%}
+    </ul>
+</div>
+{%endblock%}
