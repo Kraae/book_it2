@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 CURR_USER_KEY = "curr_user"
 
-app.config['SECRET_KEY'] = "KariLovesRobSooooooooMuch"
+app.config['SECRET_KEY'] = "Much"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 uri = os.environ.get('DATABASE_URL', 'postgresql:///book')
