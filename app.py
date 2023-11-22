@@ -16,10 +16,14 @@ CURR_USER_KEY = "curr_user"
 app.config['SECRET_KEY'] = "KariLovesRobSooooooooMuch"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
-uri = os.environ.get('DATABASE_URL', 'postgresql:///book')
-if uri.startswith('postgres://'):
-	uri = uri.replace('postgres://', 'postgresql://', 1)
+# THIS IS FOR HEROKU
+# uri = os.environ.get('DATABASE_URL', 'postgresql:///book')
+# if uri.startswith('postgres://'):
+# 	uri = uri.replace('postgres://', 'postgresql://', 1)
 
+
+# THIS IS FOR RENDER
+uri = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
 
