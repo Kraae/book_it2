@@ -1,6 +1,6 @@
 import os
 import requests
-import urllib.request
+import urllib.parse as up
 import json
 from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
@@ -25,6 +25,17 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 DATABASE = 'postgresql:///vdjvsrng:9pCjNU-s_FRmX5elmOAwcY0IA8E4vwQp@suleiman.db.elephantsql.com/vdjvsrng'
 uri = os.environ.get('DATABASE_URL',f'{DATABASE}')
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
+
+import psycopg2
+
+up.uses_netloc.append("postgres")
+urlx = up.urlparse(os.environ["DATABASE_URL"])
+conn = psycopg2.connect(database=urlx.path[1:],
+user=urlx.username,
+password=urlx.password,
+host=urlx.hostname,
+port=urlx.port
+)
 
 
 connect_db(app)
