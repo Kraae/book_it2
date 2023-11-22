@@ -22,7 +22,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 
 # THIS IS FOR RENDER
-DATABASE = 'postgresql://vdjvsrng:9pCjNU-s_FRmX5elmOAwcY0IA8E4vwQp@suleiman.db.elephantsql.com/vdjvsrng'
+DATABASE = 'postgresql:///vdjvsrng:9pCjNU-s_FRmX5elmOAwcY0IA8E4vwQp@suleiman.db.elephantsql.com/vdjvsrng'
 uri = os.environ.get('DATABASE_URL',f'{DATABASE}')
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
