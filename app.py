@@ -1,6 +1,7 @@
 import os
-from urllib.request import urlopen
-from googleapiclient.discovery import build
+import requests
+import urllib.request
+import json
 from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -33,6 +34,8 @@ api_key = "AIzaSyCUg3r9gfvDYIa_y33XCA5wobD3S4do8g8"
 
 url = "https://www.googleapis.com/books/v1/volumes"
 
+# req = urllib.request.urlopen
+
 payload = {
     'q': 'title',
     'key': api_key
@@ -54,7 +57,7 @@ def books(pg):
     booklist = []
     payload['startIndex'] = str((pg-1)*40)
     payload['maxResults'] = '40'
-    res = request.args.get(url, params = payload)
+    res = requests.get(url, params = payload)
     data = res.json()
     x = 0
     y = 40
@@ -69,10 +72,8 @@ def books(pg):
 
 @app.route('/book/<id>')
 def search_book(id):
-
-    res = request.args.get(url +'/'+id)
+    res = requests.get(url +'/'+id)
     data = res.json()
-    print(data)
     return render_template('book.html', book = data)
 
 @app.route('/book/<id>/favorite', methods= ["GET","POST"])
@@ -80,7 +81,7 @@ def add_fav_book(id):
     if not g.user:
         flash("Have to be logged in to add a favorite", "danger")
         return redirect("/login")
-    res = request.args.get(url +'/'+id)
+    res = requests.get(url +'/'+id)
     book = res.json()
     book_title = book['volumeInfo']['title']
     Bookshelf.add(
