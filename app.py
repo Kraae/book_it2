@@ -1,6 +1,4 @@
 import os
-import json
-import requests
 from urllib.request import urlopen
 from googleapiclient.discovery import build
 from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
@@ -23,7 +21,8 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 
 # THIS IS FOR RENDER
-uri = os.environ.get('DATABASE_URL')
+DATABASE = 'postgresql://vdjvsrng:9pCjNU-s_FRmX5elmOAwcY0IA8E4vwQp@suleiman.db.elephantsql.com/vdjvsrng'
+uri = os.environ.get('DATABASE_URL',f'{DATABASE}')
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
 
@@ -55,7 +54,7 @@ def books(pg):
     booklist = []
     payload['startIndex'] = str((pg-1)*40)
     payload['maxResults'] = '40'
-    res = requests.get(url, params = payload)
+    res = request.args.get(url, params = payload)
     data = res.json()
     x = 0
     y = 40
@@ -71,7 +70,7 @@ def books(pg):
 @app.route('/book/<id>')
 def search_book(id):
 
-    res = requests.get(url +'/'+id)
+    res = request.args.get(url +'/'+id)
     data = res.json()
     print(data)
     return render_template('book.html', book = data)
@@ -81,7 +80,7 @@ def add_fav_book(id):
     if not g.user:
         flash("Have to be logged in to add a favorite", "danger")
         return redirect("/login")
-    res = requests.get(url +'/'+id)
+    res = request.args.get(url +'/'+id)
     book = res.json()
     book_title = book['volumeInfo']['title']
     Bookshelf.add(
