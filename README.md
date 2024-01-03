@@ -1,8 +1,8 @@
-**Book-It
+** H1 Book-It
 
 Deployed on Render: https://bookit2.onrender.com
 
-**Description:
+** H2 Description:
 
 A site created to search for books and build a list with all of your favorite books under your username. 
 
