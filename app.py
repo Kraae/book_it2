@@ -1,6 +1,6 @@
 import os
 import requests
-import urllib.parse as up
+import urllib.request
 import json
 from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
@@ -15,35 +15,9 @@ CURR_USER_KEY = "curr_user"
 app.config['SECRET_KEY'] = "KariLovesRobSooooooooMuch"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
-# THIS IS FOR HEROKU
-# uri = os.environ.get('DATABASE_URL', 'postgresql:///book')
-# if uri.startswith('postgres://'):
-# 	uri = uri.replace('postgres://', 'postgresql://', 1)
-
-
-# THIS IS FOR RENDER
-DATABASE = 'postgresql:///vdjvsrng:9pCjNU-s_FRmX5elmOAwcY0IA8E4vwQp@suleiman.db.elephantsql.com/vdjvsrng'
+DATABASE = 'postgresql:///book'
 uri = os.environ.get('DATABASE_URL',f'{DATABASE}')
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
-
-import psycopg2
-
-# up.uses_netloc.append("postgres")
-# urlx = up.urlparse(os.environ["DATABASE_URL"])
-# conn = psycopg2.connect(database=urlx.path[1:],
-# user=urlx.username,
-# password=urlx.password,
-# host=urlx.hostname,
-# port=urlx.port
-# )
-# up.uses_netloc.append("postgres")
-urlx = up.urlparse('postgres://vdjvsrng:9pCjNU-s_FRmX5elmOAwcY0IA8E4vwQp@suleiman.db.elephantsql.com/vdjvsrng')
-conn = psycopg2.connect(database=urlx.path[1:],
-user='vdjvsrng',
-password='9pCjNU-s_FRmX5elmOAwcY0IA8E4vwQp',
-host=urlx.hostname,
-port=urlx.port
-)
 
 
 connect_db(app)
@@ -53,7 +27,7 @@ api_key = "AIzaSyCUg3r9gfvDYIa_y33XCA5wobD3S4do8g8"
 
 url = "https://www.googleapis.com/books/v1/volumes"
 
-# req = urllib.request.urlopen
+req = urllib.request.urlopen
 
 payload = {
     'q': 'title',
