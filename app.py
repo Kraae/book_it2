@@ -1,18 +1,9 @@
 import os
-<<<<<<< HEAD
-import json
-import requests
-from urllib.request import urlopen
-from googleapiclient.discovery import build
-from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
-#from flask_debugtoolbar import DebugToolbarExtension
-=======
 import requests
 import urllib.request
 import json
 from flask import Flask, render_template, request, flash, redirect, session, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
->>>>>>> master
 from sqlalchemy.exc import IntegrityError
 from forms import UserAddForm, UserEditForm, LoginForm
 from models import connect_db, db, User, Bookshelf
@@ -24,15 +15,8 @@ CURR_USER_KEY = "curr_user"
 app.config['SECRET_KEY'] = "KariLovesRobSooooooooMuch"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
-<<<<<<< HEAD
-uri = os.environ.get('DATABASE_URL', 'postgresql:///book')
-if uri.startswith('postgres://'):
-	uri = uri.replace('postgres://', 'postgresql://', 1)
-
-=======
 DATABASE = 'postgresql:///book'
 uri = os.environ.get('DATABASE_URL',f'{DATABASE}')
->>>>>>> master
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
 
@@ -43,11 +27,8 @@ api_key = "AIzaSyCUg3r9gfvDYIa_y33XCA5wobD3S4do8g8"
 
 url = "https://www.googleapis.com/books/v1/volumes"
 
-<<<<<<< HEAD
-=======
 req = urllib.request.urlopen
 
->>>>>>> master
 payload = {
     'q': 'title',
     'key': api_key
@@ -84,15 +65,8 @@ def books(pg):
 
 @app.route('/book/<id>')
 def search_book(id):
-<<<<<<< HEAD
-
     res = requests.get(url +'/'+id)
     data = res.json()
-    print(data)
-=======
-    res = requests.get(url +'/'+id)
-    data = res.json()
->>>>>>> master
     return render_template('book.html', book = data)
 
 @app.route('/book/<id>/favorite', methods= ["GET","POST"])
