@@ -21,10 +21,16 @@
                     <ul>
                         {%for book in bookshelf%}
                         <li>
+<<<<<<< HEAD
                             <a href="/book/{{book['book_id']}}">{{book['book_title']}}</a>
                             <br>
                             <a href="/book/{{book['book_id']}}/favorite/delete"
                                 class="btn btn-outline-danger">Delete</a>
+=======
+                            <a href="/book/{{book['book_id']}}/favorite/delete"
+                                class="btn btn-outline-danger">Delete</a>
+                            <a href="/book/{{book['book_id']}}">{{book['book_title']}}</a>
+>>>>>>> master
                         </li>
                         {%endfor%}
                     </ul>
